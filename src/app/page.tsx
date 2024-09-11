@@ -38,7 +38,7 @@ const schema = z
       errorMap: () => ({ message: "Please select a plan" }),
     }),
     gender: z.enum(["male", "female"], {
-      errorMap: (i) => ({ message: "Please choose a gender" }),
+      errorMap: () => ({ message: "Please choose a gender" }),
     }),
     acceptTermsAndConds: z.literal(true, {
       // message: "You must accept terms and conditions",
@@ -49,9 +49,9 @@ const schema = z
     hasCoupon: z.boolean(),
     coupon: z.string(),
     password: z
-      .string()
-      .min(6,{message: 'Password must contain at least 6 characters'})
-      .max(12,{message: 'Password must not exceed 12 characters'}),
+    .string()
+    .min(6, { message: "Password must contain at least 6 characters"})
+    .max(12, { message: "Password must not exceed 12 characters" }),
     confirmPassword: z.string(),
   })
   .refine(
@@ -75,14 +75,11 @@ const schema = z
   )
   .refine(
     (data) => {
-      // if password and confirm password are not the same, show error
       if (data.confirmPassword === data.password) return true;
-      
     },
-    //set error message and the place it should show
     {
       message: "Password does not match",
-      path: ["confirmPassword"],
+      path: ["confirmPassword"]
     }
   )
 
@@ -116,9 +113,7 @@ export default function Home() {
     if (form.values.plan === "mini") price = 800;
     if (form.values.plan === "half") price = 1200;
     if (form.values.plan === "full") price = 1500;
-
     //check discount here
-
     if (form.values.hasCoupon && form.values.coupon === "CMU2023") price = price - (price * (30 / 100));
 
     return price;
@@ -134,7 +129,7 @@ export default function Home() {
         <Space h="lg" />
 
         {/* add form */}
-        <form onSubmit={form.onSubmit((v) => alert("See you at CMU Marathon 2024"))}>
+        <form onSubmit={form.onSubmit(() => alert("See you at CMU Marathon 2024"))}>
           <Stack gap="sm">
             <Group grow align="start">
               <TextInput
@@ -187,7 +182,7 @@ export default function Home() {
 
             <Text fw="bold">
               {" "}
-              Total Price : {computePrice().toLocaleString()} BATH
+              Total Price : {computePrice().toLocaleString()} BAHT
             </Text>
 
             <Divider variant="dashed" />
